@@ -1,0 +1,34 @@
+---
+resource_types:
+  - name: npm-cache
+    type: docker-image
+    source:
+      repository: ymedlop/npm-cache-resource
+      tag: latest
+resources:
+  - name: tic-tac-toe
+    type: git
+    source: &repo-source
+      uri: https://github.com/revelles/tic-tac-toe
+      branch: master
+  - name: dependency-cache
+    type: npm-cache
+    source:
+      <<: *repo-source
+      paths:
+        - package.json
+jobs:
+  - name: Install dependencies
+    plan:
+      - get: tic-tac-toe
+        trigger: true
+      - get: dependency-cache
+  - name: Run tests
+    plan:
+      - get: tic-tac-toe
+        trigger: true
+        passed: [Install dependencies]
+      - get: dependency-cache
+        passed: [Install dependencies]
+      - task: run the test suite
+        file: tic-tac-toe/ci/tasks/run_tests.yml

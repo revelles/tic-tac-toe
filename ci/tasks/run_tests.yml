@@ -1,0 +1,15 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: node
+    tag: latest
+
+inputs:
+  - name: tic-tac-toe
+  - name: dependency-cache
+
+run:
+  path: tic-tac-toe/ci/scripts/run_tests.sh
