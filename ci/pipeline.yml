@@ -18,17 +18,17 @@ resources:
       paths:
         - package.json
 jobs:
-  - name: Install dependencies
+  - name: install-dependencies
     plan:
       - get: tic-tac-toe
         trigger: true
       - get: dependency-cache
-  - name: Run tests
+  - name: run-tests
     plan:
       - get: tic-tac-toe
         trigger: true
-        passed: [Install dependencies]
+        passed: [install-dependencies]
       - get: dependency-cache
-        passed: [Install dependencies]
-      - task: run the test suite
+        passed: [install-dependencies]
+      - task: run-the-test-suite
         file: tic-tac-toe/ci/tasks/run_tests.yml
